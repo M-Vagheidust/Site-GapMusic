@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const { URLSearchParams } = require('url');
+const { DatabaseSync } = require('node:sqlite');
 
 const BOT_TOKEN = process.env.BOT_TOKEN || '8973013935:AAE9N-n3I8jKWg9TWu_wmZICZDaeD6zzFbw';
 const MINI_APP_URL = (process.env.MINI_APP_URL || 'https://mini-app-music-bot-production.up.railway.app').replace(/\/$/, '');
@@ -20,6 +21,7 @@ const SESSION_COOKIE = 'gapmusic_admin';
 const GROUP_URL = 'https://t.me/+k1KWTCq0FMswZjM0';
 
 const DB_FILE = path.join(__dirname, 'songs_db.json');
+const SQLITE_DB_FILE = path.join(__dirname, 'gapmusic.db');
 const USERS_DB_FILE = path.join(__dirname, 'users_db.json');
 const CONFIG_DB_FILE = path.join(__dirname, 'database.config.json');
 
@@ -216,22 +218,19 @@ function loadSongs() {
     let dbConfig = {};
     try { dbConfig = JSON.parse(fs.readFileSync(CONFIG_DB_FILE, 'utf8')); } catch (e) {}
     const configuredPath = dbConfig.path ? path.resolve(__dirname, dbConfig.path) : '';
-    const selectedPath = configuredPath || (fs.existsSync(path.join(__dirname, 'songs_db.sqlite')) ? path.join(__dirname, 'songs_db.sqlite') : DB_FILE);
+    const selectedPath = configuredPath || (fs.existsSync(SQLITE_DB_FILE) ? SQLITE_DB_FILE : (fs.existsSync(path.join(__dirname, 'songs_db.sqlite')) ? path.join(__dirname, 'songs_db.sqlite') : DB_FILE));
     if (!fs.existsSync(selectedPath)) {
       ALL_SONGS = [];
       return;
     }
     if (/\.sqlite$|\.sqlite3$|\.db$/i.test(selectedPath)) {
-      const py = String.raw`import sqlite3,json,sys
-c=sqlite3.connect('file:'+sys.argv[1]+'?mode=ro',uri=True); c.row_factory=sqlite3.Row
-tables=[r[0] for r in c.execute("select name from sqlite_master where type='table' and name not like 'sqlite_%'")]
-preferred=['songs','music','tracks','audios']; table=next((t for t in preferred if t in tables), tables[0] if tables else None)
-if not table: raise Exception('SQLite database has no tables')
-rows=[dict(r) for r in c.execute('select * from "'+table.replace('"','""')+'"')]
-print(json.dumps(rows,ensure_ascii=False))`;
-      const result = spawnSync(process.env.PYTHON || 'python', ['-c', py, selectedPath], { encoding: 'utf8', maxBuffer: 100 * 1024 * 1024 });
-      if (result.status !== 0) throw new Error((result.stderr || 'SQLite read failed').trim());
-      raw = result.stdout;
+      const sqlite = new DatabaseSync(selectedPath, { readOnly: true });
+      const tables = sqlite.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'").all().map(row => row.name);
+      const table = ['songs', 'music', 'tracks', 'audios'].find(name => tables.includes(name)) || tables[0];
+      if (!table) { sqlite.close(); throw new Error('SQLite database has no tables'); }
+      const quotedTable = `"${String(table).replace(/"/g, '""')}"`;
+      raw = JSON.stringify(sqlite.prepare(`SELECT * FROM ${quotedTable}`).all());
+      sqlite.close();
       console.log(`📦 منبع دیتابیس SQLite: ${path.basename(selectedPath)}`);
     } else {
       raw = fs.readFileSync(selectedPath, 'utf8').replace(/^\uFEFF/, '');
@@ -281,7 +280,7 @@ function saveSongs() {
   try {
     let configured = {};
     try { configured = JSON.parse(fs.readFileSync(CONFIG_DB_FILE, 'utf8')); } catch (e) {}
-    const activeDb = configured.path ? path.resolve(__dirname, configured.path) : DB_FILE;
+    const activeDb = configured.path ? path.resolve(__dirname, configured.path) : (fs.existsSync(SQLITE_DB_FILE) ? SQLITE_DB_FILE : DB_FILE);
     if (/\.sqlite$|\.sqlite3$|\.db$/i.test(activeDb)) return;
     const tmp = `${activeDb}.tmp`;
     fs.writeFileSync(tmp, JSON.stringify(ALL_SONGS, null, 2), 'utf8');
@@ -583,6 +582,7 @@ loadUsers();
 // سرور وب Express و API های مینی‌اپ
 // ---------------------------------------------------------------------------
 const app = express();
+app.use((req, res, next) => { res.setHeader('Access-Control-Allow-Origin', process.env.FRONTEND_ORIGIN || '*'); res.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS'); res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Range'); if(req.method==='OPTIONS')return res.sendStatus(204); next(); });
 app.use(express.json({ limit: '20mb' }));
 app.use(express.static(path.join(__dirname, 'templates')));
 
@@ -750,6 +750,7 @@ app.get('/api/songs', (req, res) => {
     id: s.id,
     title: s.title,
     performer: s.performer,
+    url: s.url || '',
     likes: s.likes || 0,
     plays: s.plays || 0
   }));
@@ -858,6 +859,7 @@ app.get('/api/random', (req, res) => {
     id: s.id,
     title: s.title,
     performer: s.performer,
+    url: s.url || '',
     likes: s.likes || 0
   });
 });
