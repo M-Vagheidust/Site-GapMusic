@@ -45,6 +45,8 @@
     .auth-actions{display:flex;gap:8px;align-items:center}.login-btn{border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:12px;text-decoration:none;font-size:12px}.login-btn:hover{background:var(--card-hover)}
 
     .song-list {max-width:760px;margin:auto;padding:8px 18px;display:flex;flex-direction:column;gap:4px}
+    .song-card::before{content:'♫';width:42px;height:42px;flex:none;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:19px;background:linear-gradient(145deg,#28a1bd,#244452 55%,#9f3d61);box-shadow:0 5px 16px #0003}
+    .song-card:nth-child(3n+2)::before{background:linear-gradient(145deg,#91424f,#343347 55%,#171d25)}.song-card:nth-child(3n)::before{background:linear-gradient(145deg,#2d7482,#21404c 55%,#ad3d4b)}
     .song-card {
       background:transparent;border:1px solid transparent;border-radius:13px;padding:8px 9px;display:flex;align-items:center;justify-content:space-between;gap:9px;
       transition: 0.2s;
@@ -62,7 +64,7 @@
 
     /* Player Bar */
     .player-bar {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+      position: fixed; bottom: 76px; left: 10px; right: 10px; z-index: 30;
       background:rgba(23,40,54,.96);backdrop-filter:blur(24px);
       border-top: 1px solid var(--border); padding: 10px 16px 14px;
       display:none;flex-direction:column;gap:8px;width:calc(100% - 20px);max-width:520px;margin:auto;border:1px solid var(--border);border-radius:18px;padding:11px 14px calc(12px + env(safe-area-inset-bottom));box-shadow:0 16px 60px #0007;bottom:10px;left:10px;right:10px
@@ -86,7 +88,8 @@
     .empty-msg { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 14px; }
     .hero{max-width:760px;margin:12px auto 10px;padding:8px 18px 17px;text-align:center}.hero-art{display:none}.hero h1{font-size:19px;margin:0}.hero p{color:var(--muted);font-size:12px;margin:3px 0 0}.welcome-card{max-width:720px;margin:8px auto 14px;padding:15px 17px;border:1px solid rgba(119,205,247,.25);border-radius:18px;background:linear-gradient(120deg,rgba(47,142,194,.48),rgba(80,72,111,.48) 60%,rgba(173,72,100,.42));box-shadow:0 12px 40px #05101d55;text-align:center}.welcome-card b{font-size:18px}.welcome-card p{margin:2px 0 8px;color:#d5e5ef;font-size:12px}.welcome-card button{border:0;border-radius:9px;background:#f6f9fc;color:#243747;padding:6px 15px;font-weight:700;cursor:pointer}.quick-links{max-width:720px;margin:0 auto 12px;padding:0 18px;display:grid;grid-template-columns:1fr 1fr;gap:7px}.quick-link{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.08);color:#e6edf4;padding:10px;text-align:center;font-size:12px;cursor:pointer}.section-head{max-width:760px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}.section-head small{color:var(--muted)}
     .admin-upload{display:none;max-width:720px;margin:16px auto;padding:18px;border:1px solid var(--border);background:var(--card);border-radius:18px}.admin-upload.visible{display:block}.admin-upload h3{margin:0 0 5px}.admin-upload p{font-size:12px;color:var(--muted);margin:0 0 12px}.upload-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.upload-row input{max-width:100%;color:var(--muted)}.upload-btn{background:var(--primary);color:white;border:0;border-radius:11px;padding:10px 16px;font-weight:700;cursor:pointer}.notice{font-size:12px;color:var(--muted);margin-top:9px}
-    @media(min-width:760px){header{position:relative;border:0}.player-bar{left:50%;right:auto;width:min(100%,760px);transform:translateX(-50%);border:1px solid var(--border);bottom:14px;border-radius:20px}}
+    .bottom-nav{position:fixed;z-index:25;bottom:0;left:0;right:0;height:64px;padding:6px 12px calc(6px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:center;background:rgba(18,31,43,.97);border-top:1px solid var(--border);backdrop-filter:blur(18px)}.bottom-nav button{border:0;background:none;color:var(--muted);font:inherit;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer}.bottom-nav button strong{font-size:19px;line-height:1.2;color:var(--primary)}body{padding-bottom:165px}.section-head{margin-top:5px}
+    @media(min-width:760px){header{position:relative;border:0}.player-bar{left:50%;right:auto;width:min(100% - 30px,520px);transform:translateX(-50%);bottom:84px}.bottom-nav{left:50%;right:auto;transform:translateX(-50%);width:min(100%,520px);border-radius:18px 18px 0 0}}
   </style>
 </head>
 <body>
@@ -132,11 +135,12 @@
       <span id="durTime">0:00</span>
     </div>
   </div>
+  <nav class="bottom-nav"><button onclick="switchTab('all')"><strong>⌂</strong>خانه</button><button onclick="loadPopular()"><strong>⌕</strong>جست‌وجو</button><button onclick="playRandom()"><strong>➤</strong>پخش</button><button onclick="switchTab('fav')"><strong>♡</strong>کتابخانه</button><button onclick="document.getElementById('googleLogin').click()"><strong>◉</strong>حساب</button></nav>
 
   <audio id="audioPlayer" preload="none"></audio>
 
   <script>
-    const tg = window.Telegram?.WebApp;
+    const tg = null;
     if (tg) {
       tg.ready();
       tg.expand();
@@ -145,6 +149,9 @@
     const initData = tg?.initData || '';
     const userId = tg?.initDataUnsafe?.user?.id || '';
     const authParams = `init_data=${encodeURIComponent(initData)}&user_id=${encodeURIComponent(userId)}`;
+    const API_BASE = new URLSearchParams(location.search).get('api') || localStorage.getItem('gapmusic_api_base') || '';
+    if(new URLSearchParams(location.search).has('api'))localStorage.setItem('gapmusic_api_base',API_BASE);
+    const apiUrl = route => `${API_BASE.replace(/\/$/, '')}${route}`;
 
     let currentTab = 'all';
     let currentSongs = [];
@@ -158,7 +165,8 @@
 
     async function loadFavorites() {
       try {
-        const res = await fetch(`/api/favorites?init_data=${encodeURIComponent(initData)}&user_id=${userId}`);
+        if(!API_BASE){favoriteIds=new Set(JSON.parse(localStorage.getItem('gapmusic_favorites')||'[]'));if(currentTab==='fav'){currentSongs=JSON.parse(localStorage.getItem('gapmusic_library')||'[]').filter(s=>favoriteIds.has(s.id));renderSongs()}return}
+        const res = await fetch(apiUrl(`/api/favorites?init_data=${encodeURIComponent(initData)}&user_id=${userId}`));
         const data = await res.json();
         favoriteIds = new Set(data.favorite_ids || []);
         if (currentTab === 'fav') {
@@ -171,7 +179,8 @@
     async function loadSongs(q = '') {
       const listEl = document.getElementById('songList');
       try {
-        const res = await fetch(`/api/songs?q=${encodeURIComponent(q)}&limit=60`);
+        if(!API_BASE){const r=await fetch('./songs_db.json');if(!r.ok)throw new Error('songs_db.json not found');const db=await r.json();const all=(Array.isArray(db)?db:(db.songs||db.items||[])).map(s=>({...s,title:s.title||s.name||'نامشخص',performer:s.performer||s.artist||'نامشخص',uid:s.uid||String(s.id),url:s.url||s.audio_url||s.src||'',plays:Number(s.plays)||0}));localStorage.setItem('gapmusic_library',JSON.stringify(all));const term=q.trim().toLowerCase();currentSongs=all.filter(s=>!term||`${s.title} ${s.performer}`.toLowerCase().includes(term)).slice(0,120);document.getElementById('songCount').textContent=`${all.length} آهنگ`;renderSongs();return}
+        const res = await fetch(apiUrl(`/api/songs?q=${encodeURIComponent(q)}&limit=60`));
         const data = await res.json();
         currentSongs = data.items || [];
         document.getElementById('songCount').textContent = `${data.total || currentSongs.length} آهنگ`;
@@ -181,14 +190,14 @@
       }
     }
 
-    async function loadPopular(){currentTab='all';document.getElementById('tabAll').classList.add('active');document.getElementById('tabFav').classList.remove('active');const listEl=document.getElementById('songList');try{const res=await fetch('/api/songs?filter=popular&limit=60');const data=await res.json();currentSongs=data.items||[];document.getElementById('songCount').textContent='پربازدیدها';renderSongs()}catch(e){listEl.innerHTML='<div class="empty-msg">خطا در دریافت آهنگ‌ها</div>'}}
+    async function loadPopular(){if(!API_BASE){const songs=JSON.parse(localStorage.getItem('gapmusic_library')||'[]');currentSongs=[...songs].sort((a,b)=>b.plays-a.plays).slice(0,120);document.getElementById('songCount').textContent='پربازدیدها';renderSongs();return}currentTab='all';document.getElementById('tabAll').classList.add('active');document.getElementById('tabFav').classList.remove('active');const listEl=document.getElementById('songList');try{const res=await fetch(apiUrl('/api/songs?filter=popular&limit=60'));const data=await res.json();currentSongs=data.items||[];document.getElementById('songCount').textContent='پربازدیدها';renderSongs()}catch(e){listEl.innerHTML='<div class="empty-msg">خطا در دریافت آهنگ‌ها</div>'}}
 
-    fetch(`/api/config?${authParams}`).then(r=>r.json()).then(c=>{if(c.is_admin){document.getElementById('adminUpload').classList.add('visible');document.getElementById('tabDb').classList.add('visible')}if(c.google_login_enabled){if(c.admin_email)document.getElementById('googleLogout').style.display='inline-block';else document.getElementById('googleLogin').style.display='inline-block'}}).catch(()=>{});
-    async function logoutGoogle(){await fetch('/auth/logout',{method:'POST'});location.reload()}
+    if(API_BASE)fetch(apiUrl(`/api/config?${authParams}`)).then(r=>r.json()).then(c=>{if(c.is_admin){document.getElementById('adminUpload').classList.add('visible');document.getElementById('tabDb').classList.add('visible')}if(c.google_login_enabled){if(c.admin_email)document.getElementById('googleLogout').style.display='inline-block';else document.getElementById('googleLogin').style.display='inline-block'}}).catch(()=>{});
+    async function logoutGoogle(){if(API_BASE)await fetch(apiUrl('/auth/logout'),{method:'POST'});location.reload()}
     async function uploadDatabase(){
       const input=document.getElementById('dbFile'),notice=document.getElementById('uploadNotice'),file=input.files[0];
       if(!file){notice.textContent='ابتدا فایل JSON یا SQLite را انتخاب کنید.';return}
-      try{let response;if(/\.(sqlite|sqlite3|db)$/i.test(file.name)){response=await fetch(`/api/admin/database/sqlite?${authParams}&filename=${encodeURIComponent(file.name)}`,{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:file})}else{const parsed=JSON.parse(await file.text());const songs=Array.isArray(parsed)?parsed:(parsed.songs||parsed.items);if(!Array.isArray(songs))throw new Error('آرایه آهنگ‌ها در فایل پیدا نشد.');response=await fetch('/api/admin/database',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({songs,filename:file.name,init_data:initData,user_id:userId})})}const result=await response.json();if(!response.ok)throw new Error(result.detail||'بارگذاری ناموفق بود.');notice.textContent=`دیتابیس ${result.filename||file.name} فعال شد؛ ${result.count} آهنگ قابل پخش.`;loadSongs(document.getElementById('searchInput').value)}catch(e){notice.textContent=`خطا: ${e.message}`}
+      try{if(!API_BASE)throw new Error('GitHub Pages سرور ندارد. برای بارگذاری فایل دیتابیس، بک‌اند لازم است.');let response;if(/\.(sqlite|sqlite3|db)$/i.test(file.name)){response=await fetch(apiUrl(`/api/admin/database/sqlite?${authParams}&filename=${encodeURIComponent(file.name)}`),{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:file})}else{const parsed=JSON.parse(await file.text());const songs=Array.isArray(parsed)?parsed:(parsed.songs||parsed.items);if(!Array.isArray(songs))throw new Error('آرایه آهنگ‌ها در فایل پیدا نشد.');response=await fetch(apiUrl('/api/admin/database'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({songs,filename:file.name,init_data:initData,user_id:userId})})}const result=await response.json();if(!response.ok)throw new Error(result.detail||'بارگذاری ناموفق بود.');notice.textContent=`دیتابیس ${result.filename||file.name} فعال شد؛ ${result.count} آهنگ قابل پخش.`;loadSongs(document.getElementById('searchInput').value)}catch(e){notice.textContent=`خطا: ${e.message}`}
     }
 
     function switchTab(tab) {
@@ -234,7 +243,7 @@
             </div>
             <div class="actions">
               <button class="icon-btn" onclick="toggleFav(${s.id}, this)" title="علاقه‌مندی">${isFav ? '❤️' : '🤍'}</button>
-              <button class="icon-btn" onclick="sendToChat('${s.uid}')" title="ارسال به پیوی">📥</button>
+              <button class="icon-btn" onclick="copySong('${escapeHtml(s.title)} — ${escapeHtml(s.performer)}')" title="کپی نام آهنگ">⧉</button>
               <button class="icon-btn play" onclick="playSong(${idx})">${isPlaying ? '⏸' : '▶'}</button>
             </div>
           </div>
@@ -255,7 +264,8 @@
       document.getElementById('miniTitle').textContent=song.title; document.getElementById('miniArtist').textContent=song.performer;
       document.getElementById('playerBar').classList.add('visible');
 
-      audio.src = `/api/stream/${encodeURIComponent(song.uid)}`;
+      audio.src = song.url || (API_BASE ? apiUrl(`/api/stream/${encodeURIComponent(song.uid)}`) : '');
+      if(!audio.src){document.getElementById('playerBar').classList.remove('visible');if(song.file_id||song.from_chat_id&&song.message_id){const base=prompt('آدرس سرور پخش را وارد کن (مثال: https://music-api.example.com)');if(base){localStorage.setItem('gapmusic_api_base',base.replace(/\/$/,''));location.reload()}}else alert('این آهنگ فایل صوتی قابل پخش ندارد.');return}
       audio.play().catch(() => {});
       updateMediaSession(song);
       renderSongs();
@@ -281,7 +291,8 @@
 
     async function playRandom() {
       try {
-        const res = await fetch('/api/random');
+        if(!API_BASE){if(!currentSongs.length)await loadSongs();const apiSongs=await fetch('./songs_db.json').then(r=>r.json());const items=Array.isArray(apiSongs)?apiSongs:(apiSongs.songs||[]);const playable=items.filter(s=>s.file_id||s.from_chat_id&&s.message_id);if(!playable.length){alert('برای پخش تصادفی، API پخش را متصل کنید.');return}const s=playable[Math.floor(Math.random()*playable.length)];currentSongs=[{...s,title:s.title||s.name,performer:s.performer||s.artist,uid:s.uid||String(s.id)},...currentSongs];playSong(0);return}
+        const res = await fetch(apiUrl('/api/random'));
         const song = await res.json();
         if (song.uid) {
           currentSongs = [song, ...currentSongs];
@@ -292,7 +303,8 @@
 
     async function toggleFav(songId, btn) {
       try {
-        const res = await fetch(`/api/favorite/${songId}`, {
+        if(!API_BASE){if(favoriteIds.has(songId))favoriteIds.delete(songId);else favoriteIds.add(songId);localStorage.setItem('gapmusic_favorites',JSON.stringify([...favoriteIds]));btn.textContent=favoriteIds.has(songId)?'❤️':'🤍';if(currentTab==='fav')loadFavorites();return}
+        const res = await fetch(apiUrl(`/api/favorite/${songId}`), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ init_data: initData, user_id: userId })
@@ -307,16 +319,7 @@
 
     async function toggleCurrentFav(){if(currentIndex<0)return;const s=currentSongs[currentIndex];await toggleFav(s.id,{set textContent(v){document.querySelector('.mini-heart').textContent=v}})}
 
-    async function sendToChat(uid) {
-      try {
-        const res = await fetch(`/api/send/${encodeURIComponent(uid)}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ init_data: initData, user_id: userId })
-        });
-        if (res.ok && tg) tg.showAlert('✅ موزیک به چت شما در ربات ارسال شد!');
-      } catch (e) {}
-    }
+    async function copySong(text){try{await navigator.clipboard.writeText(text);alert('نام آهنگ کپی شد')}catch(e){alert(text)}}
 
     // پشتیبانی از پخش پس‌زمینه و دکمه‌های صفحه قفل گوشی
     function updateMediaSession(song) {
