@@ -44,7 +44,7 @@
     .tab-admin{display:none}.tab-admin.visible{display:block}
     .auth-actions{display:flex;gap:8px;align-items:center}.login-btn{border:1px solid var(--border);background:var(--card);color:var(--text);padding:8px 12px;border-radius:12px;text-decoration:none;font-size:12px}.login-btn:hover{background:var(--card-hover)}
 
-    .song-list {max-width:760px;margin:auto;padding:8px 18px;display:flex;flex-direction:column;gap:4px}
+    .song-list {max-width:620px;margin:auto;padding:8px 28px;display:flex;flex-direction:column;gap:4px}
     .song-card::before{content:'♫';width:42px;height:42px;flex:none;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:19px;background:linear-gradient(145deg,#28a1bd,#244452 55%,#9f3d61);box-shadow:0 5px 16px #0003}
     .song-card:nth-child(3n+2)::before{background:linear-gradient(145deg,#91424f,#343347 55%,#171d25)}.song-card:nth-child(3n)::before{background:linear-gradient(145deg,#2d7482,#21404c 55%,#ad3d4b)}
     .song-card {
@@ -54,7 +54,7 @@
     .song-card:hover,.song-card.playing{border-color:var(--border);background:rgba(255,255,255,.09)}
     .song-info { flex: 1; min-width: 0; cursor: pointer; }
     .song-title{font-size:13px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.song-artist{font-size:11px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .actions { display: flex; align-items: center; gap: 6px; }
+    .actions { display: flex; align-items: center; justify-content: center; gap: 6px; margin-inline: 8px; }
     .icon-btn {
       width:31px;height:31px;border-radius:50%;border:1px solid transparent;
       background:transparent;color:#c4d1dc;display:flex;align-items:center;justify-content:center;
@@ -88,7 +88,7 @@
     .empty-msg { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 14px; }
     .hero{max-width:760px;margin:12px auto 10px;padding:8px 18px 17px;text-align:center}.hero-art{display:none}.hero h1{font-size:19px;margin:0}.hero p{color:var(--muted);font-size:12px;margin:3px 0 0}.welcome-card{max-width:720px;margin:8px auto 14px;padding:15px 17px;border:1px solid rgba(119,205,247,.25);border-radius:18px;background:linear-gradient(120deg,rgba(47,142,194,.48),rgba(80,72,111,.48) 60%,rgba(173,72,100,.42));box-shadow:0 12px 40px #05101d55;text-align:center}.welcome-card b{font-size:18px}.welcome-card p{margin:2px 0 8px;color:#d5e5ef;font-size:12px}.welcome-card button{border:0;border-radius:9px;background:#f6f9fc;color:#243747;padding:6px 15px;font-weight:700;cursor:pointer}.quick-links{max-width:720px;margin:0 auto 12px;padding:0 18px;display:grid;grid-template-columns:1fr 1fr;gap:7px}.quick-link{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.08);color:#e6edf4;padding:10px;text-align:center;font-size:12px;cursor:pointer}.section-head{max-width:760px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}.section-head small{color:var(--muted)}
     .admin-upload{display:none;max-width:720px;margin:16px auto;padding:18px;border:1px solid var(--border);background:var(--card);border-radius:18px}.admin-upload.visible{display:block}.admin-upload h3{margin:0 0 5px}.admin-upload p{font-size:12px;color:var(--muted);margin:0 0 12px}.upload-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.upload-row input{max-width:100%;color:var(--muted)}.upload-btn{background:var(--primary);color:white;border:0;border-radius:11px;padding:10px 16px;font-weight:700;cursor:pointer}.notice{font-size:12px;color:var(--muted);margin-top:9px}
-    .bottom-nav{position:fixed;z-index:25;bottom:0;left:0;right:0;height:64px;padding:6px 12px calc(6px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:center;background:rgba(18,31,43,.97);border-top:1px solid var(--border);backdrop-filter:blur(18px)}.bottom-nav button{border:0;background:none;color:var(--muted);font:inherit;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer}.bottom-nav button strong{font-size:19px;line-height:1.2;color:var(--primary)}body{padding-bottom:165px}.section-head{margin-top:5px}
+    .bottom-nav{position:fixed;z-index:25;bottom:0;left:0;right:0;height:64px;padding:6px 12px calc(6px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;align-items:center;background:rgba(18,31,43,.97);border-top:1px solid var(--border);backdrop-filter:blur(18px)}.bottom-nav button{border:0;background:none;color:var(--muted);font:inherit;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer}.bottom-nav button .nav-icon{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .18s,color .18s}.bottom-nav button .icon-fill{fill:currentColor;stroke:none}.bottom-nav button span{font-size:10px;line-height:1.4}.bottom-nav button.active{color:#eaf7ff}.bottom-nav button.active .nav-icon{color:var(--primary);filter:drop-shadow(0 0 7px rgba(50,169,232,.42));transform:translateY(-1px)}.bottom-nav button.nav-play .nav-icon{width:25px;height:25px}body{padding-bottom:165px}.section-head{margin-top:5px}
     @media(min-width:760px){header{position:relative;border:0}.player-bar{left:50%;right:auto;width:min(100% - 30px,520px);transform:translateX(-50%);bottom:84px}.bottom-nav{left:50%;right:auto;transform:translateX(-50%);width:min(100%,520px);border-radius:18px 18px 0 0}}
   </style>
 </head>
@@ -135,7 +135,7 @@
       <span id="durTime">0:00</span>
     </div>
   </div>
-  <nav class="bottom-nav"><button onclick="switchTab('all')"><strong>⌂</strong>خانه</button><button onclick="loadPopular()"><strong>⌕</strong>جست‌وجو</button><button onclick="playRandom()"><strong>➤</strong>پخش</button><button onclick="switchTab('fav')"><strong>♡</strong>کتابخانه</button><button onclick="document.getElementById('googleLogin').click()"><strong>◉</strong>حساب</button></nav>
+  <nav class="bottom-nav"><button class="active" onclick="setNavActive(this);switchTab('all')"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>خانه</span></button><button onclick="setNavActive(this);loadPopular()"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><span>جست‌وجو</span></button><button class="nav-play" onclick="setNavActive(this);playRandom()"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path class="icon-fill" d="m10 8 6 4-6 4z"/></svg><span>پخش</span></button><button onclick="setNavActive(this);switchTab('fav')"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5-8.8 10-8.8 10s-8.8-5-8.8-10A4.7 4.7 0 0 1 12 6.2a4.7 4.7 0 0 1 8.8 2.6Z"/></svg><span>کتابخانه</span></button><button onclick="setNavActive(this);document.getElementById('googleLogin').click()"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0"/><circle cx="12" cy="12" r="10"/></svg><span>حساب</span></button></nav>
 
   <audio id="audioPlayer" preload="none"></audio>
 
@@ -199,6 +199,8 @@
       if(!file){notice.textContent='ابتدا فایل JSON یا SQLite را انتخاب کنید.';return}
       try{if(!API_BASE)throw new Error('GitHub Pages سرور ندارد. برای بارگذاری فایل دیتابیس، بک‌اند لازم است.');let response;if(/\.(sqlite|sqlite3|db)$/i.test(file.name)){response=await fetch(apiUrl(`/api/admin/database/sqlite?${authParams}&filename=${encodeURIComponent(file.name)}`),{method:'POST',headers:{'Content-Type':'application/octet-stream'},body:file})}else{const parsed=JSON.parse(await file.text());const songs=Array.isArray(parsed)?parsed:(parsed.songs||parsed.items);if(!Array.isArray(songs))throw new Error('آرایه آهنگ‌ها در فایل پیدا نشد.');response=await fetch(apiUrl('/api/admin/database'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({songs,filename:file.name,init_data:initData,user_id:userId})})}const result=await response.json();if(!response.ok)throw new Error(result.detail||'بارگذاری ناموفق بود.');notice.textContent=`دیتابیس ${result.filename||file.name} فعال شد؛ ${result.count} آهنگ قابل پخش.`;loadSongs(document.getElementById('searchInput').value)}catch(e){notice.textContent=`خطا: ${e.message}`}
     }
+
+    function setNavActive(button) { document.querySelectorAll(".bottom-nav button").forEach(item => item.classList.toggle("active", item === button)); }
 
     function switchTab(tab) {
       currentTab = tab;
